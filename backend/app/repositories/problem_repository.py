@@ -17,10 +17,11 @@ def get_problem(
         .first()
     )
 
-from app.database.models import Problem
 
-
-def create_problem(db, problem_data):
+def create_problem(
+    db: Session,
+    problem_data: dict,
+):
     problem = Problem(
         platform=problem_data["platform"],
         platform_problem_id=problem_data["platform_problem_id"],
@@ -31,7 +32,6 @@ def create_problem(db, problem_data):
     )
 
     db.add(problem)
-    db.commit()
-    db.refresh(problem)
+    db.flush()      # Gives us problem.id without committing
 
     return problem
