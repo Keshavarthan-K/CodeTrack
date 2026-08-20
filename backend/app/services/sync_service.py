@@ -9,11 +9,17 @@ from app.repositories.solve_event_repository import (
 )
 
 
-def sync_codeforces(
+def sync_platform(
     db,
     user,
     solved_problems,
 ):
+    """
+    Generic sync for a normalized list of solved-problem dicts from
+    any platform's fetcher+processor. Works because the dicts already
+    conform to the same internal shape (see submission_processor.py /
+    docs section "Normalized Internal Data").
+    """
     created_problems = 0
     created_solves = 0
 
@@ -54,3 +60,9 @@ def sync_codeforces(
         "new_problems": created_problems,
         "new_solves": created_solves,
     }
+
+
+# Backwards-compatible alias - existing scripts (test_sync.py) import
+# sync_codeforces specifically, and the name still reads fine since
+# Codeforces was the first platform wired up.
+sync_codeforces = sync_platform
